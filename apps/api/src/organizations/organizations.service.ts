@@ -1,0 +1,20 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+
+@Injectable()
+export class OrganizationsService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  findAll() {
+    return this.prisma.organization.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: {
+        memberships: true,
+        integrations: true,
+        workflows: true,
+      },
+    });
+  }
+}
