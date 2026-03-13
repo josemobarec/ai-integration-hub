@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum MembershipRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum IntegrationProvider {
+  GMAIL
+  NOTION
+  SLACK
+  STRIPE
+}
+
+enum ConnectionStatus {
+  CONNECTED
+  DISCONNECTED
+  ERROR
+  PENDING
+}
+
+enum WorkflowType {
+  EMAIL_TRIAGE
+  TICKET_GENERATION
+  CRM_SUPPORT_SYNC
+}
+
+enum WorkflowRunStatus {
+  PENDING
+  RUNNING
+  WAITING_APPROVAL
+  COMPLETED
+  FAILED
+  CANCELED
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships Membership[]
+  auditLogs   AuditLog[]
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships  Membership[]
+  integrations IntegrationConnection[]
+  workflows    Workflow[]
+}
+
+model Membership {
+  id             String         @id @default(cuid())
+  userId         String
+  organizationId String
+  role           MembershipRole
+  createdAt      DateTime       @default(now())
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+  @@index([organizationId])
+  @@index([userId])
+}
+
+model IntegrationConnection {
+  id                String              @id @default(cuid())
+  organizationId    String
+  provider          IntegrationProvider
+  status            ConnectionStatus
+  accountLabel      String?
+  externalAccountId String?
+  accessToken       String?
+  refreshToken      String?
+  tokenExpiresAt    DateTime?
+  metadata          Json?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([provider])
+}
+
+model Workflow {
+  id             String       @id @default(cuid())
+  organizationId String
+  name           String
+  type           WorkflowType
+  isActive       Boolean      @default(true)
+  config         Json?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  runs         WorkflowRun[]
+
+  @@index([organizationId])
+  @@index([type])
+}
+
+model WorkflowRun {
+  id            String            @id @default(cuid())
+  workflowId    String
+  status        WorkflowRunStatus
+  triggerSource String
+  inputPayload  Json?
+  outputPayload Json?
+  errorMessage  String?
+  startedAt     DateTime?
+  finishedAt    DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  workflow  Workflow          @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  approvals ApprovalRequest[]
+  auditLogs AuditLog[]
+
+  @@index([workflowId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ApprovalRequest {
+  id            String         @id @default(cuid())
+  workflowRunId String
+  requestedById String?
+  decidedById   String?
+  status        ApprovalStatus @default(PENDING)
+  reason        String?
+  decisionNote  String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  decidedAt     DateTime?
+
+  workflowRun WorkflowRun @relation(fields: [workflowRunId], references: [id], onDelete: Cascade)
+
+  @@index([workflowRunId])
+  @@index([status])
+}
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  userId        String?
+  workflowRunId String?
+  action        String
+  entityType    String
+  entityId      String?
+  metadata      Json?
+  createdAt     DateTime @default(now())
+
+  user        User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  workflowRun WorkflowRun? @relation(fields: [workflowRunId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([workflowRunId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
