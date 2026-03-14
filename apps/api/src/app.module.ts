@@ -4,6 +4,7 @@ import { ApprovalsModule } from './approvals/approvals.module';
 import { IntegrationsModule } from './integrations/integrations.module';
 import { OrganizationsModule } from './organizations/organizations.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { RunsModule } from './runs/runs.module';
 import { WorkflowsModule } from './workflows/workflows.module';
 
 @Module({
@@ -13,6 +14,7 @@ import { WorkflowsModule } from './workflows/workflows.module';
     IntegrationsModule,
     WorkflowsModule,
     ApprovalsModule,
+    RunsModule,
   ],
   controllers: [AppController],
 })
