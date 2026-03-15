@@ -1,4 +1,5 @@
 import { fetchJson } from '@/lib/api';
+import { getStatusBadgeClass } from '@/lib/ui';
 
 type Approval = {
   id: string;
@@ -19,25 +20,38 @@ export default async function ApprovalsPage() {
   const approvals = await fetchJson<Approval[]>('/approvals');
 
   return (
-    <div>
-      <h1>Approvals</h1>
-      <p>Aprobaciones del flujo human-in-the-loop.</p>
+    <div className="section-stack">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Approvals</h1>
+          <p className="page-subtitle">
+            Flujo human-in-the-loop para decisiones críticas del sistema.
+          </p>
+        </div>
+      </div>
 
-      <div style={{ marginTop: 24, display: 'grid', gap: 16 }}>
+      <div className="grid">
         {approvals.map((approval) => (
-          <div
-            key={approval.id}
-            style={{
-              border: '1px solid #e5e7eb',
-              borderRadius: 8,
-              padding: 16,
-            }}
-          >
-            <h2 style={{ margin: 0 }}>{approval.workflowRun.workflow.name}</h2>
-            <p><strong>Status:</strong> {approval.status}</p>
-            <p><strong>Reason:</strong> {approval.reason ?? '—'}</p>
-            <p><strong>Decision:</strong> {approval.decisionNote ?? '—'}</p>
-            <p><strong>Organization:</strong> {approval.workflowRun.workflow.organization.name}</p>
+          <div key={approval.id} className="card">
+            <div className="card-body">
+              <h2 className="card-title">{approval.workflowRun.workflow.name}</h2>
+
+              <div className={getStatusBadgeClass(approval.status)}>
+                {approval.status}
+              </div>
+
+              <div className="meta-list">
+                <div className="meta-row">
+                  <strong>Reason:</strong> {approval.reason ?? '—'}
+                </div>
+                <div className="meta-row">
+                  <strong>Decision:</strong> {approval.decisionNote ?? '—'}
+                </div>
+                <div className="meta-row">
+                  <strong>Organization:</strong> {approval.workflowRun.workflow.organization.name}
+                </div>
+              </div>
+            </div>
           </div>
         ))}
       </div>

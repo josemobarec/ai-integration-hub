@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
 import { auth } from '@clerk/nextjs/server';
+import { NavLink } from '@/components/nav-link';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard' },
@@ -19,55 +19,33 @@ export default async function AppLayout({
   const { userId } = await auth();
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        display: 'grid',
-        gridTemplateColumns: '240px 1fr',
-      }}
-    >
-      <aside
-        style={{
-          borderRight: '1px solid #e5e7eb',
-          padding: 20,
-          background: '#fafafa',
-        }}
-      >
-        <div style={{ fontWeight: 800, marginBottom: 24 }}>
-          AI Integration Hub
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="brand">
+          <div className="brand-title">AI Integration Hub</div>
+          <div className="brand-subtitle">B2B workflow orchestration</div>
         </div>
 
-        <nav style={{ display: 'grid', gap: 12 }}>
+        <nav className="nav-section">
           {navItems.map((item) => (
-            <Link key={item.href} href={item.href}>
-              {item.label}
-            </Link>
+            <NavLink key={item.href} href={item.href} label={item.label} />
           ))}
         </nav>
       </aside>
 
-      <div>
-        <header
-          style={{
-            height: 64,
-            borderBottom: '1px solid #e5e7eb',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '0 24px',
-          }}
-        >
+      <div className="shell-main">
+        <header className="topbar">
           <div>
-            <div style={{ fontWeight: 700 }}>Workspace</div>
-            <div style={{ fontSize: 12, opacity: 0.7 }}>
-              User ID: {userId}
-            </div>
+            <div className="topbar-title">Workspace</div>
+            <div className="topbar-meta">User ID: {userId}</div>
           </div>
 
           <UserButton />
         </header>
 
-        <main style={{ padding: 24 }}>{children}</main>
+        <div className="page-wrap">
+          <div className="page-inner">{children}</div>
+        </div>
       </div>
     </div>
   );

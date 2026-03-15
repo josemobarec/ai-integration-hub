@@ -2,17 +2,29 @@ import Link from 'next/link';
 
 export default function HomePage() {
   return (
-    <div style={{ padding: 32 }}>
-      <h1 style={{ marginBottom: 12 }}>AI Integration Hub</h1>
-      <p style={{ marginBottom: 24 }}>
-        Hub B2B para conectar sistemas y automatizar workflows con agentes.
-      </p>
+    <main className="hero">
+      <section className="hero-card">
+        <div className="hero-badge">AI Integration Hub · Portfolio Project</div>
 
-      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-        <Link href="/dashboard">Ir al dashboard</Link>
-        <Link href="/sign-in">Iniciar sesión</Link>
-        <Link href="/sign-up">Crear cuenta</Link>
-      </div>
-    </div>
+        <h1>Conecta sistemas y automatiza workflows con agentes.</h1>
+
+        <p>
+          Plataforma B2B para coordinar organizations, integrations, workflows,
+          runs, approvals y audit logs desde una arquitectura moderna con IA.
+        </p>
+
+        <div className="hero-actions">
+          <Link href="/dashboard" className="btn btn-primary">
+            Entrar al dashboard
+          </Link>
+          <Link href="/sign-in" className="btn btn-secondary">
+            Iniciar sesión
+          </Link>
+          <Link href="/sign-up" className="btn btn-secondary">
+            Crear cuenta
+          </Link>
+        </div>
+      </section>
+    </main>
   );
 }

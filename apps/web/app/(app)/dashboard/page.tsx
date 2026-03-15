@@ -25,33 +25,33 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <div>
-      <h1 style={{ marginBottom: 8 }}>Dashboard</h1>
-      <p style={{ marginBottom: 24 }}>
-        Resumen básico del sistema conectado al backend real.
-      </p>
+    <div className="section-stack">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Dashboard</h1>
+          <p className="page-subtitle">
+            Resumen operativo del sistema con datos reales del backend.
+          </p>
+        </div>
+      </div>
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-          gap: 16,
-        }}
-      >
+      <div className="grid grid-cols-5">
         {cards.map((card) => (
-          <div
-            key={card.label}
-            style={{
-              border: '1px solid #e5e7eb',
-              borderRadius: 8,
-              padding: 16,
-              background: '#fff',
-            }}
-          >
-            <div style={{ fontSize: 14, opacity: 0.7 }}>{card.label}</div>
-            <div style={{ fontSize: 32, fontWeight: 800 }}>{card.value}</div>
+          <div key={card.label} className="card kpi-card">
+            <div className="kpi-label">{card.label}</div>
+            <div className="kpi-value">{card.value}</div>
           </div>
         ))}
+      </div>
+
+      <div className="card">
+        <div className="card-body">
+          <h2 className="card-title">Estado del proyecto</h2>
+          <p className="card-subtle">
+            Base técnica, auth, workflows, approvals, runs y auditoría ya
+            conectados de extremo a extremo.
+          </p>
+        </div>
       </div>
     </div>
   );

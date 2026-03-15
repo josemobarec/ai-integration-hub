@@ -1,4 +1,5 @@
 import { fetchJson } from '@/lib/api';
+import { getStatusBadgeClass } from '@/lib/ui';
 
 type Integration = {
   id: string;
@@ -15,24 +16,38 @@ export default async function IntegrationsPage() {
   const integrations = await fetchJson<Integration[]>('/integrations');
 
   return (
-    <div>
-      <h1>Integrations</h1>
-      <p>Integraciones disponibles desde el backend.</p>
+    <div className="section-stack">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Integrations</h1>
+          <p className="page-subtitle">
+            Conectores y estados disponibles desde el backend.
+          </p>
+        </div>
+      </div>
 
-      <div style={{ marginTop: 24, display: 'grid', gap: 16 }}>
+      <div className="grid grid-cols-3">
         {integrations.map((integration) => (
-          <div
-            key={integration.id}
-            style={{
-              border: '1px solid #e5e7eb',
-              borderRadius: 8,
-              padding: 16,
-            }}
-          >
-            <h2 style={{ margin: 0 }}>{integration.provider}</h2>
-            <p><strong>Status:</strong> {integration.status}</p>
-            <p><strong>Account:</strong> {integration.accountLabel ?? '—'}</p>
-            <p><strong>Organization:</strong> {integration.organization.name}</p>
+          <div key={integration.id} className="card">
+            <div className="card-body">
+              <h2 className="card-title">{integration.provider}</h2>
+
+              <div className={getStatusBadgeClass(integration.status)}>
+                {integration.status}
+              </div>
+
+              <div className="meta-list">
+                <div className="meta-row">
+                  <strong>Account:</strong> {integration.accountLabel ?? '—'}
+                </div>
+                <div className="meta-row">
+                  <strong>Organization:</strong> {integration.organization.name}
+                </div>
+                <div className="meta-row">
+                  <strong>Slug:</strong> {integration.organization.slug}
+                </div>
+              </div>
+            </div>
           </div>
         ))}
       </div>

@@ -1,4 +1,5 @@
 import { fetchJson } from '@/lib/api';
+import { getStatusBadgeClass } from '@/lib/ui';
 
 type Workflow = {
   id: string;
@@ -15,25 +16,38 @@ export default async function WorkflowsPage() {
   const workflows = await fetchJson<Workflow[]>('/workflows');
 
   return (
-    <div>
-      <h1>Workflows</h1>
-      <p>Workflows disponibles en el sistema.</p>
+    <div className="section-stack">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Workflows</h1>
+          <p className="page-subtitle">
+            Flujos configurados para automatizar acciones del sistema.
+          </p>
+        </div>
+      </div>
 
-      <div style={{ marginTop: 24, display: 'grid', gap: 16 }}>
+      <div className="grid grid-cols-3">
         {workflows.map((workflow) => (
-          <div
-            key={workflow.id}
-            style={{
-              border: '1px solid #e5e7eb',
-              borderRadius: 8,
-              padding: 16,
-            }}
-          >
-            <h2 style={{ margin: 0 }}>{workflow.name}</h2>
-            <p><strong>Type:</strong> {workflow.type}</p>
-            <p><strong>Active:</strong> {workflow.isActive ? 'Yes' : 'No'}</p>
-            <p><strong>Organization:</strong> {workflow.organization.name}</p>
-            <p><strong>Runs:</strong> {workflow.runs.length}</p>
+          <div key={workflow.id} className="card">
+            <div className="card-body">
+              <h2 className="card-title">{workflow.name}</h2>
+
+              <div className={getStatusBadgeClass(workflow.isActive ? 'ACTIVE' : 'INACTIVE')}>
+                {workflow.isActive ? 'ACTIVE' : 'INACTIVE'}
+              </div>
+
+              <div className="meta-list">
+                <div className="meta-row">
+                  <strong>Type:</strong> {workflow.type}
+                </div>
+                <div className="meta-row">
+                  <strong>Organization:</strong> {workflow.organization.name}
+                </div>
+                <div className="meta-row">
+                  <strong>Runs:</strong> {workflow.runs.length}
+                </div>
+              </div>
+            </div>
           </div>
         ))}
       </div>

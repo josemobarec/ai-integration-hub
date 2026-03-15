@@ -10,27 +10,30 @@ export default async function OrganizationsPage() {
   const organizations = await fetchJson<Organization[]>('/organizations');
 
   return (
-    <div>
-      <h1>Organizations</h1>
-      <p>Listado básico de organizaciones desde el backend.</p>
+    <div className="section-stack">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Organizations</h1>
+          <p className="page-subtitle">
+            Gestión base de workspaces conectados al backend real.
+          </p>
+        </div>
+      </div>
 
-      <div style={{ marginTop: 24, display: 'grid', gap: 16 }}>
+      <div className="grid grid-cols-3">
         {organizations.map((organization) => (
-          <div
-            key={organization.id}
-            style={{
-              border: '1px solid #e5e7eb',
-              borderRadius: 8,
-              padding: 16,
-            }}
-          >
-            <h2 style={{ margin: 0 }}>{organization.name}</h2>
-            <p style={{ margin: '8px 0 0 0' }}>
-              <strong>Slug:</strong> {organization.slug}
-            </p>
-            <p style={{ margin: '8px 0 0 0' }}>
-              <strong>ID:</strong> {organization.id}
-            </p>
+          <div key={organization.id} className="card">
+            <div className="card-body">
+              <h2 className="card-title">{organization.name}</h2>
+              <div className="meta-list">
+                <div className="meta-row">
+                  <strong>Slug:</strong> {organization.slug}
+                </div>
+                <div className="meta-row">
+                  <strong>ID:</strong> {organization.id}
+                </div>
+              </div>
+            </div>
           </div>
         ))}
       </div>
