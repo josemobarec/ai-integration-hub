@@ -100,7 +100,7 @@ La persistencia se gestiona con Prisma sobre PostgreSQL, mientras que Redis qued
 ## Capturas del proyecto
 
 ### Landing pública
-![Landing]([https://github.com/josemobarec/ai-integration-hub/blob/main/images/landing.png)
+![Landing](https://github.com/josemobarec/ai-integration-hub/blob/main/images/landing.png)
 
 ### Dashboard
 ![Dashboard](https://github.com/josemobarec/ai-integration-hub/blob/main/images/dashboard.png)
