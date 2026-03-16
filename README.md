@@ -25,7 +25,6 @@ Documentación disponible aquí:
 [View Documentation](https://github.com/josemobarec/ai-integration-hub/blob/main/docs/AI_Integration_Hub.pdf)
 
 
-
 ---
 
 ## Stack principal
