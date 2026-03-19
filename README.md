@@ -1,6 +1,6 @@
 # AI Integration Hub
 
-Plataforma B2B para conectar sistemas y automatizar workflows con agentes, approvals y auditoría.
+Plataforma B2B para conectar sistemas y automatizar workflows con agentes, approvals y auditoría. 
 
 ## Descripción
 
